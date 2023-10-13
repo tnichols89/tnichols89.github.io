@@ -120,7 +120,7 @@ Let's clarify a few things before moving forward. We have introduced some functi
   - That is, $\frac{\partial f}{\partial x_i}$ becomes the upstream gradient used in the backward pass computations for whatever layer produces the data that is used as input to BatchNorm during the forward pass
 
 ### Math, Step-by-Step
-**Step 1:** Find $\frac{\partial f}{\partial \gamma}$.
+#### Step 1: Find dgamma
 
 $$
 \begin{align*}
@@ -131,7 +131,7 @@ $$
 
 Note that we sum over the elements in the mini-batch $m$ because $\gamma$ and $\beta$ are both computed over the each mini-batch.
 
-**Step 2:** Find $\frac{\partial f}{\partial \beta}$.
+#### Step 2: Find dbeta
 
 $$
 \begin{align*}
@@ -142,7 +142,8 @@ $$
 
 As we do above, we sum over the elements in the mini-batch $m$ because $\gamma$ and $\beta$ are both computed over the each mini-batch.
 
-**Step 3:** Find $\frac{\partial f}{\partial x_i}$. This part of the problem is not terribly difficult but it is a *lot* of steps. The hardest part here is going to be organizing our work and avoiding repeat work.
+#### Step 3: Find dx
+This part of the problem is not terribly difficult but it is a *lot* of steps. The hardest part here is going to be organizing our work and avoiding repeat work.
 
 We begin with a naive application of the chain rule from multivariate calculus, and we then factor terms out to minimize the number of repeat computations:
 
@@ -166,72 +167,90 @@ $$
 \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i}
 $$
 
-But since $\frac{\partial f}{\partial y_i}$ is given to us as the upstream gradient, we will only need to find an expression for $\frac{\partial y_i}{\partial \hat{x}_i}$.
+But since $\frac{\partial f}{\partial y_i}$ is given to us as the upstream gradient, we will only need to find an expression for $\frac{\partial y_i}{\partial \hat{x}_i}$:
+
+$$
+\begin{align*}
+  \frac{\partial y_i}{\partial \hat{x}_i} &= \frac{\partial}{\partial \hat{x}_i} \left[ \gamma \hat{x}_i + \beta \right] \\
+  &= \gamma
+\end{align*}
+$$
 
 Second:
 
 $$
-\frac{\partial \hat{x}_i}{\partial x_i}
+\begin{align*}
+  \frac{\partial \hat{x}_i}{\partial x_i} &= \frac{\partial}{\partial x_i} \left[ \frac{x_i - \mu_B}{\sqrt{\sigma^2_B + \epsilon}} \right] \\
+  &= \frac{\partial}{\partial x_i} \left[ \frac{x_i}{\sqrt{\sigma^2_B + \epsilon}} - \frac{\mu_B}{\sqrt{\sigma^2_B + \epsilon}} \right] \\
+  &= \frac{1}{\sqrt{\sigma^2_B + \epsilon}} \\
+\end{align*}
 $$
 
 Third:
 
 $$
-\frac{\partial \hat{x}_i}{\partial \sigma^2_B} %\text{used in 2 terms, only want to compute once}
+\begin{align*}
+  \frac{\partial \hat{x}_i}{\partial \sigma^2_B} &= \frac{\partial}{\partial \sigma^2_B} \left[ \frac{x_i - \mu_B}{\sqrt{\sigma^2_B + \epsilon}} \right] \\
+  &= \frac{\partial}{\partial \sigma^2_B} \left[ (x_i - \mu_B)(\sigma^2_B + \epsilon)^{-1/2} \right] \\
+  &= -\frac{1}{2} (x_i - \mu_B)(\sigma^2_B + \epsilon)^{-3/2}
+\end{align*}
 $$
 
-Note that this partial is actually used in 2 terms. We only want to compute it once and reuse the results for each of the two separate terms, so we split it out into its own step.
+Note that this partial is actually used in two terms. We only want to compute it once and reuse the results for each of the two separate terms.
 
 Fourth:
 
 $$
-\frac{\partial \sigma^2_B}{\partial x_i}
+\begin{align*}
+  \frac{\partial \sigma^2_B}{\partial x_i} &= \frac{\partial}{\partial x_i} \left[ \frac{1}{m} \Sigma^m_{i=1}(x_i - \mu_B)^2 \right] \\
+  &= \frac{2}{m} (x_i - \mu_B)
+\end{align*}
 $$
 
 Fifth:
 
 $$
-\frac{\partial \hat{x}_i}{\partial \mu_B}
+\begin{align*}
+  \frac{\partial \hat{x}_i}{\partial \mu_B} &= \frac{\partial}{\partial \mu_B} \left[ \frac{x_i}{\sqrt{\sigma^2_B + \epsilon}} - \frac{\mu_B}{\sqrt{\sigma^2_B + \epsilon}} \right] \\
+  &= \frac{-1}{\sqrt{\sigma^2_B + \epsilon}}
+\end{align*}
 $$
 
 Sixth:
 
 $$
-\frac{\partial \sigma^2_B}{\partial \mu_B}
+\begin{align*}
+  \frac{\partial \sigma^2_B}{\partial \mu_B} &= \frac{\partial}{\partial \mu_B} \left[ \frac{1}{m} \Sigma^m_{i=1} (x_i - \mu_B)^2 \right] \\
+  &= \frac{2}{m} \Sigma^m_{i=1} (x_i - \mu_B) (-1) \\
+  &= -\frac{2}{m} \Sigma^m_{i=1} (x_i - \mu_B) \\
+  &= -2 \left[ \frac{1}{m} \Sigma^m_{i=1} x_i - \frac{1}{m} \Sigma^m_{i=1} \mu_B \right] \\
+  &= -2 \left[ \mu_B - \frac{m \cdot \mu_B}{m} \right] \\
+  &= -2 \left[ \mu_B - \mu_B \right] \\
+  &= 0
+\end{align*}
 $$
+
+Intuitively, this checks out: we do not, in general, expect the rate of change of the variance to have any dependency on the batch mean. This is also particularly convenient since it zeroes out a chunky term for us.
 
 And, finally:
 
 $$
-\frac{\partial \mu_B}{\partial x_i}
-$$
-
-
-<!-- ---
-
-Since 
-
-$$
-\frac{\partial f}{\partial \hat{x}_i} = \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i}
-$$
-
-is common to every single term, let's begin there:
-
-$$
 \begin{align*}
-  \frac{\partial f}{\partial \hat{x}_i} &= \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} \\
-  &= \frac{\partial f}{\partial y_i} \frac{\partial}{\partial \hat{x}_i} \left[ \gamma \hat{x}_i + \beta \right] \\
-  &= \frac{\partial f}{\partial y_i} \gamma
+  \frac{\partial \mu_B}{\partial x_i} &= \frac{\partial}{\partial x_i} \left[ \frac{1}{m} \Sigma^m_{i=1} x_i \right] \\
+  &= \frac{1}{m}
 \end{align*}
 $$
 
-Now, we are only one partial derivative away from having completed our first term, so let's take care of:
+#### Step 4: Plug 'n Chug
 
 $$
 \begin{align*}
-  \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial x_i} &= \frac{\partial f}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial x_i} \\
-  &= \frac{\partial f}{\partial \hat{x}_i} \frac{\partial}{\partial x_i} \left[ \frac{x_i - \mu_B}{\sqrt{\sigma^2_B + \epsilon}} \right] \\
-  &= \frac{\partial f}{\partial \hat{x}_i} \frac{\partial}{\partial x_i} \left[ \frac{x_i}{\sqrt{\sigma^2_B + \epsilon}} - \frac{\mu_B}{\sqrt{\sigma^2_B + \epsilon}} \right] \\
-  &= \frac{\partial f}{\partial \hat{x}_i} \frac{1}{\sqrt{\sigma^2_B + \epsilon}} \\
+  \frac{\partial f}{\partial x_i} &= \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial x_i} + \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial \mu_B} \frac{\partial \mu_B}{\partial x_i} + \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial \sigma^2_B} \frac{\partial \sigma^2_B}{\partial x_i} + \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial \sigma^2_B} \frac{\partial \sigma^2_B}{\partial \mu_B} \frac{\partial \mu_B}{\partial x_i} \\
+
+  &= \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial x_i} + \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial \mu_B} \frac{\partial \mu_B}{\partial x_i} + \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial \sigma^2_B} \frac{\partial \sigma^2_B}{\partial x_i} + 0 \\
+
+  &= \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial x_i} + \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial y_j} \frac{\partial y_j}{\partial \hat{x}_j} \frac{\partial \hat{x}_j}{\partial \mu_B} \right] \frac{\partial \mu_B}{\partial x_i} + \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial y_j} \frac{\partial y_j}{\partial \hat{x}_j} \frac{\partial \hat{x}_j}{\partial \sigma^2_B} \right] \frac{\partial \sigma^2_B}{\partial x_i}
 \end{align*}
-$$ -->
+$$
+
+We add the sums over the mini-batches for the $\mu_B$ and $\sigma^2_B$ partials because those are both functions of the *entire* batch of samples, not just the sample $x_i$ for which we are computing the current gradient.
