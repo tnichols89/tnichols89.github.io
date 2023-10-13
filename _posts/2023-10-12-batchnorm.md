@@ -254,3 +254,36 @@ $$
 $$
 
 We add the sums over the mini-batches for the $\mu_B$ and $\sigma^2_B$ partials because those are both functions of the *entire* batch of samples, not just the sample $x_i$ for which we are computing the current gradient.
+
+For brevity, let:
+
+$$
+\frac{\partial f}{\partial \hat{x}_i} = \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i} = \frac{\partial f}{\partial y_i} \gamma
+$$
+
+Then:
+
+$$
+\begin{align*}
+  \frac{\partial f}{\partial x_i} &= \frac{\partial f}{\partial \hat{x}_i} \frac{\partial \hat{x}_i}{\partial x_i} + \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \frac{\partial \hat{x}_j}{\partial \mu_B} \right] \frac{\partial \mu_B}{\partial x_i} + \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \frac{\partial \hat{x}_j}{\partial \sigma^2_B} \right] \frac{\partial \sigma^2_B}{\partial x_i} \\
+
+  &= \frac{\partial f}{\partial \hat{x}_i} \frac{1}{\sqrt{\sigma^2_B + \epsilon}} \\
+  &+ \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \frac{-1}{\sqrt{\sigma^2_B + \epsilon}} \right] \frac{1}{m} \\
+  &+ \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \left( -\frac{1}{2} \right) (x_i - \mu_B)(\sigma^2_B + \epsilon)^{-3/2} \right] \frac{2}{m} (x_i - \mu_B) \\
+
+  &= \frac{\partial f}{\partial \hat{x}_i} (\sigma^2_B + \epsilon)^{-1/2} \\
+  &- \frac{1}{m} (\sigma^2_B + \epsilon)^{-1/2} \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \right] \\
+  &- \frac{1}{2} \frac{2}{m} (x_i - \mu_B) \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} (x_j - \mu_B) (\sigma^2_B + \epsilon)^{-1/2} \frac{1}{\sqrt{\sigma^2_B + \epsilon}} \frac{1}{\sqrt{\sigma^2_B + \epsilon}} \right] \\
+
+  &= \frac{\partial f}{\partial \hat{x}_i} (\sigma^2_B + \epsilon)^{-1/2} \\
+  &- \frac{1}{m} (\sigma^2_B + \epsilon)^{-1/2} \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \right] \\
+  &- \frac{1}{m} (\sigma^2_B + \epsilon)^{-1/2} \frac{(x_i - \mu_B)}{\sqrt{\sigma^2_B + \epsilon}} \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \frac{(x_j - \mu_B)}{\sqrt{\sigma^2_B + \epsilon}} \right] \\
+
+  &= \frac{\partial f}{\partial \hat{x}_i} (\sigma^2_B + \epsilon)^{-1/2} \\
+  &- \frac{1}{m} (\sigma^2_B + \epsilon)^{-1/2} \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \right] \\
+  &- \frac{1}{m} (\sigma^2_B + \epsilon)^{-1/2} \hat{x}_i \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \hat{x}_j \right] \\
+
+  &= \frac{(\sigma^2_B + \epsilon)^{-1/2}}{m} \left[ m \frac{\partial f}{\partial \hat{x}_i} - \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \right] - \hat{x}_i \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \hat{x}_j \right] \right]
+  
+\end{align*}
+$$
