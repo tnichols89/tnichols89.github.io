@@ -47,7 +47,7 @@ When we apply z-score normalization to a batch of samples, the resulting batch h
 This is the basis upon which BatchNorm was designed.
 
 ### BatchNorm Definition
-BatchNorm is articulated by Sergey Ioffe and Christian Szegedy in [the paper that originally introduced it](http://proceedings.mlr.press/v37/ioffe15.html) as follows:
+BatchNorm is articulated by Sergey Ioffe and Christian Szegedy in [the paper that originally introduced it](https://proceedings.mlr.press/v37/ioffe15.html) as follows:
 
 $$
 \begin{align*}
