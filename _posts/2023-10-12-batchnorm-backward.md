@@ -212,7 +212,8 @@ $$
 \end{align*}
 $$
 
-Note that, wherever vector-vector multiplication occurs in this equation, we are performing elementwise multiplication (i.e. the Hadamard product).
+> Note: wherever vector-vector multiplication occurs in these equations, we are calculating the Hadamard product (i.e. elementwise multiplication), not inner or outer products.
+{: .prompt-info}
 
 For example,
 
@@ -220,6 +221,16 @@ $$
 \frac{\partial f}{\partial \hat{x}_j} \hat{x}_j
 $$
 
-is not an inner or an outer product, but a Hadamard product.
+denotes elementwise multiplication.
 
-Thus, we have derived $\frac{\partial f}{\partial \gamma}$, $\frac{\partial f}{\partial \beta}$, and $\frac{\partial f}{\partial x_i}$.
+Thus, the three partial derivatives we need to perform the backward pass over BatchNorm are:
+
+$$
+\begin{align*}
+  \frac{\partial f}{\partial \gamma} &= \Sigma^m_{i=1} \frac{\partial f}{\partial y_i} \cdot \hat{x}_i \\
+  \frac{\partial f}{\partial \beta} &= \Sigma^m_{i=1} \frac{\partial f}{\partial y_i} \cdot \vec{1} \\
+  \frac{\partial f}{\partial x_i} &= \frac{(\sigma^2_B + \epsilon)^{-1/2}}{m} \left[ m \frac{\partial f}{\partial \hat{x}_i} - \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \right] - \hat{x}_i \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \hat{x}_j \right] \right]
+\end{align*}
+$$
+
+Where $\frac{\partial f}{\partial \gamma}$ and $\frac{\partial f}{\partial \beta}$ are used to update the learnable parameters of BatchNorm itself and $\frac{\partial f}{\partial x_i}$ becomes the upstream gradient for the next layer of our network that will be updated during the backward pass.
