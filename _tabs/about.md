@@ -16,7 +16,7 @@ Between 2022 and 2023, I studied artificial intelligence and machine learning vi
   - CS224N: [Natural Language Processing with Deep Learning](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1224/)
   - CS224W: [Machine Learning with Graphs](https://snap.stanford.edu/class/cs224w-2023/)
 - Spring 2022/2023
-  - CS231N: [Deep Learning for Computer Vision](http://cs231n.stanford.edu/)
+  - CS231N: [Deep Learning for Computer Vision](https://cs231n.stanford.edu/)
   - CS224U: [Natural Language Understanding](https://web.stanford.edu/class/cs224u/2022/)
 
 My vision for this blog is to act as an archive of selected works from my time studying artificial intelligence and machine learning at Stanford, as well as some of the extracurricular machine learning projects and research and I have worked on.
