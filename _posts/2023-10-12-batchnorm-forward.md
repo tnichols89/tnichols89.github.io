@@ -1,6 +1,6 @@
 ---
 title: 'BatchNorm - Part 1: Forward Pass'
-date: 2023-10-13 19:00:00 -0800
+date: 2023-10-13 18:00:00 -0700
 categories: [ML, Derivation]
 tags: [batchnorm, layernorm, backpropagation]
 math: true
