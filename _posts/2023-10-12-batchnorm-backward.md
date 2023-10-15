@@ -80,9 +80,10 @@ $$
 \end{align*}
 $$
 
-Note that $\frac{\partial f}{\partial y_i}$ is the upstream gradient, which we assume is given to us. This corresponds to the $\frac{\partial f}{\partial x_i}$ produced by the parent node in the directed computational graph of the neural network during the preceding backpropagation step. In code, this would be represented by a tensor passed in as an argument that was produced in the preceding backpropagation step.
+Note that $\frac{\partial f}{\partial y_i}$ is the upstream gradient, which we assume is given to us. This corresponds to the $\frac{\partial f}{\partial x_i}$ produced by the parent node in the directed computational graph of the neural network during the preceding backpropagation step.
 
-Before we evaluate the partials, we list out each "atomic" piece of the puzzle derived above that we need to compute in order to actually calculate $\frac{\partial f}{\partial x_i}$.
+#### Piecemeal Derivations
+In an effort to keep our work organized, we break the equation derived above into small pieces and approach them one-by-one before combining them all into the final $\frac{\partial f}{\partial x_i}$.
 
 First, we will need:
 
@@ -164,8 +165,9 @@ $$
 \end{align*}
 $$
 
-### Step 4: Plug 'n Chug
-We now apply our derivations to the equation we constructed above using the chain rule:
+
+#### Tie It All Together
+Now that we have the partial derivatives of all the bits and pieces we need, let's apply them to the equation we constructed above using the chain rule:
 
 $$
 \begin{align*}
@@ -223,7 +225,8 @@ $$
 
 denotes elementwise multiplication.
 
-Thus, the three partial derivatives we need to perform the backward pass over BatchNorm are:
+### Bottom Line
+Altogether, the three partial derivatives we need to perform the backward pass over BatchNorm are:
 
 $$
 \begin{align*}
