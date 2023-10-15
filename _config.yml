@@ -44,7 +44,8 @@ social:
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
 
-google_site_verification: # fill in to your verification string
+# fill in to your verification string
+google_site_verification: ut9qz80e09tFFE1aoHLgflpuTUxJ-m4nnFukhbt4jEA
 
 # ↑ --------------------------
 # The end of `jekyll-seo-tag` settings
