@@ -15,7 +15,7 @@ In this post, we briefly explore vector aggregation operations and articulate a 
 ## Background
 There are multiple common approaches to vector aggregation of varying complexity and popularity. Some are particularly suitable to certain types of problems.
 
-For contexts in which there is no inherent ordering, we are limited to the following permutation-invariant approaches:
+For contexts in which the ordering of the vectors should not impact the resultant aggregate vector, we are limited to the following permutation-invariant approaches:
 - Sum aggregation
 - Mean aggregation
 - Max aggregation
