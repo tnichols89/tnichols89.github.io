@@ -80,7 +80,8 @@ $$
 \end{align*}
 $$
 
-Note that $\frac{\partial f}{\partial y_i}$ is the upstream gradient, which we assume is given to us. This corresponds to the $\frac{\partial f}{\partial x_i}$ produced by the parent node in the directed computational graph of the neural network during the preceding backpropagation step.
+> Note that $\frac{\partial f}{\partial y_i}$ is the upstream gradient, which we assume is given to us. This corresponds to the $\frac{\partial f}{\partial x_i}$ produced by the parent node in the directed computational graph of the neural network during the preceding backpropagation step.
+{: .prompt-info}
 
 #### Piecemeal Derivations
 In an effort to keep our work organized, we break the equation derived above into small pieces and approach them one-by-one before combining them all into the final $\frac{\partial f}{\partial x_i}$.
@@ -120,7 +121,8 @@ $$
 \end{align*}
 $$
 
-Note that this partial is actually used in two terms. We only want to compute it once and reuse the results for each of the two separate terms.
+> Note that this partial is actually used in two terms. We only want to compute it once and reuse the results for each of the two separate terms.
+{: .prompt-info}
 
 Fourth:
 
@@ -154,7 +156,8 @@ $$
 \end{align*}
 $$
 
-Intuitively, this checks out: we do not, in general, expect the rate of change of the variance to have any dependency on the batch mean. This is also particularly convenient since it zeroes out a chunky term for us.
+> Intuitively, this checks out: we do not, in general, expect the rate of change of the variance to have any dependency on the batch mean. This is also particularly convenient since it zeroes out a chunky term for us.
+{: .prompt-tip}
 
 And, finally:
 
