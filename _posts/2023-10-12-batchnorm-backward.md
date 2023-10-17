@@ -52,7 +52,8 @@ $$
 \end{align*}
 $$
 
-Note that we sum over the elements in the mini-batch $m$ because $\gamma$ and $\beta$ are both computed over the each mini-batch.
+> We have to make sure to add the sums over the mini-batch because $\gamma$ and $\beta$ are both computed over the entire batch of samples.
+{: .prompt-warning}
 
 ### Step 2: Find dbeta
 
@@ -80,7 +81,7 @@ $$
 \end{align*}
 $$
 
-> Note that $\frac{\partial f}{\partial y_i}$ is the upstream gradient, which we assume is given to us. This corresponds to the $\frac{\partial f}{\partial x_i}$ produced by the parent node in the directed computational graph of the neural network during the preceding backpropagation step.
+> $\frac{\partial f}{\partial y_i}$ is the upstream gradient, which we assume is given to us. This corresponds to the $\frac{\partial f}{\partial x_i}$ produced by the parent node in the directed computational graph of the neural network during the preceding backpropagation step.
 {: .prompt-info}
 
 #### Piecemeal Derivations
@@ -121,7 +122,7 @@ $$
 \end{align*}
 $$
 
-> Note that this partial is actually used in two terms. We only want to compute it once and reuse the results for each of the two separate terms.
+> This partial is actually used in two terms. We only want to compute it once and reuse the results for each of the two separate terms.
 {: .prompt-info}
 
 Fourth:
@@ -156,7 +157,7 @@ $$
 \end{align*}
 $$
 
-> Intuitively, this checks out: we do not, in general, expect the rate of change of the variance to have any dependency on the batch mean. This is also particularly convenient since it zeroes out a chunky term for us.
+> Intuitively, this checks out: we do not, in general, expect the rate of change of the variance to have any dependency on the batch mean. This is also particularly convenient since it zeroes out a chunky term.
 {: .prompt-tip}
 
 And, finally:
@@ -182,7 +183,8 @@ $$
 \end{align*}
 $$
 
-We add the sums over the mini-batches for the $\mu_B$ and $\sigma^2_B$ partials because those are both functions of the *entire* batch of samples, not just the sample $x_i$ for which we are computing the current gradient.
+> We have to make sure to add the sums over the mini-batches once again for the $\mu_B$ and $\sigma^2_B$ partials because those are both functions of the *entire* batch of samples, not just the sample $x_i$ for which we are computing the current gradient.
+{: .prompt-warning}
 
 For brevity, let:
 
@@ -217,7 +219,7 @@ $$
 \end{align*}
 $$
 
-> Note: wherever vector-vector multiplication occurs in these equations, we are calculating the Hadamard product (i.e. elementwise multiplication), not inner or outer products.
+> Wherever vector-vector multiplication occurs in these equations, we are calculating the Hadamard product (i.e. elementwise multiplication), not inner or outer products.
 {: .prompt-info}
 
 For example,
