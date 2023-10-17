@@ -191,7 +191,7 @@ Between linear projection and learned aggregation, however, we generally expect 
 Such marginal improvements may be attributable to the simple fact that learned aggregation generally introduces more parameters than a simple single-layer linear projection though, so you might be able to pull them even by simply adding more dense linear layers. Introducing some nonlinearity (e.g. ReLU activations) to both may also help boost performance further.
 
 ## Conclusion
-In many cases, learned aggregation as defined and implemented above will perform approximately the same as simply flattening the feature matrix from $(b, \ell, d)$ to $(b, \ell * d)$ and following it up with a simple linear projection to the desired output dimensionality.
+In many cases, learned aggregation as defined and implemented above will perform approximately the same as simply flattening the feature matrix from $(b, \ell, d)$ to $(b, \ell \cdot d)$ and following it up with a simple linear projection to the desired output dimensionality.
 
 You may, however, find that a more sophisticated approach to learned aggregation can provide your model with notable benefits on your specific dataset. As is the case with most things in ML, different approaches may perform better or worse based on many different factors, including those specific to your dataset, and it may not always be clear why.
 
