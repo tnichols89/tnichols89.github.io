@@ -1,7 +1,7 @@
 ---
 # the default layout is 'page'
 icon: fas fa-info-circle
-order: 4
+order: 5
 ---
 
 My name is [Tyler Nichols](https://www.linkedin.com/in/tyler-nichols-08148723/).
