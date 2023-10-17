@@ -8,9 +8,9 @@ math: true
 ## Overview
 Vector aggregation is a common task in machine learning.
 
-The general objective behind vector aggregation is: given a set of vectors with some shape $(\ell, d)$, we want to produce a single vector $(1, d)$ that represents the entire set of of $\ell$ vectors. Aggregating sets of vectors in this way provides a convenient means to represent internal state for downstream use akin to RNNs or to reduce the overall size of a state matrix - as with hidden states in transformers, for example - in a relatively efficient way.
+The general objective behind vector aggregation is: given a set of vectors with some shape $(\ell, d)$, we want to produce a single vector $(1, d)$ that encodes as much of the semantic meaning of the entire set of $\ell$ vectors as possible. Aggregating sets of vectors in this way provides a convenient means to represent internal state for downstream use akin to RNNs or to reduce the overall size of a state matrix - as with hidden states in transformers, for example - in a relatively efficient way.
 
-In this post, we briefly explore vector aggregation operations and articulate a form of learned aggregation based on a slightly modified version of the self-attention mechanism used in transformers.
+In this post, we briefly explore vector aggregation operations and articulate a form of learned aggregation based on a slightly modified version of the self-attention mechanism used in transformers. I also recommend checking out the [Tinkering With Attention Pooling](https://benjaminwarner.dev/2022/07/14/tinkering-with-attention-pooling) post from Benjamin Warner on the same exact concept for additional reading, if you are so inclined.
 
 ## Background
 There are multiple common approaches to vector aggregation of varying complexity and popularity. Some are particularly suitable to certain types of problems.
@@ -56,7 +56,9 @@ where:
 {: .prompt-info}
 
 ## Code
-An example of a learned aggregation model implemented using PyTorch is as follows:
+We provide an example implementation of a learned aggregation PyTorch module below. This module consumes input of shape $(b, \ell, d)$ and produces output of shape $(b, p)$ for $b, \ell, d,$ and $p$ as defined above. This can be interpreted as reducing the feature matrix $X$ over dimension 1 while simultaneously (potentially) changing the embedding dimensionality.
+
+As a PyTorch module, this class can be directly copied and instantiated as a class instance attribute in the constructor of other PyTorch modules/models and the parameters will be updated during backpropagation.
 
 ```python
 import torch
