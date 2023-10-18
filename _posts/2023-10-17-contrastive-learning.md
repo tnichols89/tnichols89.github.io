@@ -122,7 +122,7 @@ $$
 
 We can build an intuitive understanding of how this loss function works by deconstructing both cases.
 
-First, recall that $S_c(\vec{p}, \vec{q}) = -1$ when $\vec{p}$ and $\vec{q}$ point in opposite directions, $S_c(\vec{p}, \vec{q}) = 0$ when $\vec{p}$ and $\vec{q}$ are orthogonal to each other, and $S_c(\vec{p}, \vec{q}) = -1$ when $\vec{p}$ and $\vec{q}$ point in the same exact direction. 
+Before proceeding, note that $S_c(\vec{p}, \vec{q}) = -1$ when $\vec{p}$ and $\vec{q}$ point in opposite directions, $S_c(\vec{p}, \vec{q}) = 0$ when $\vec{p}$ and $\vec{q}$ are orthogonal, and $S_c(\vec{p}, \vec{q}) = 1$ when $\vec{p}$ and $\vec{q}$ point in the same exact direction. 
 
 #### Case 1
 When $y = 1$ for some given $\vec{p}$ and $\vec{q}$ - that is, when the two embedding vectors correspond to *similar* samples - we see that:
