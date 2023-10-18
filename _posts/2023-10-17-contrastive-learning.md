@@ -194,20 +194,76 @@ Which is the maximum possible loss (considering our chosen `margin` hyperparamet
 {: .prompt-tip}
 
 ### Triplet Loss
+Triplet loss differs from cosine embedding loss in several key ways. Rather than being parameterized by only two vectors, triplet loss is parameterized by three vectors: an *anchor* vector, a *positive* vector, and a *negative* vector. The anchor vector is an embedding corresponding to any random sample, the positive vector is an embedding corresponding to a similar sample, and the negative vector is an embedding corresponding to a dissimilar sample.
 
-- Not build in to PyTorch but easy to implement
-- Parameterized by three vecs
-- Simultaneously disperses dissimilar vecs while coalescing similar vecs for each sample in a batch
+Although PyTorch does not provide a native implementation of triplet loss, it is very easy to implement ourselves, as shown below.
+
+Let $\vec{r}_a, \vec{r}_p, \vec{r}_n \in \mathbb{R}^n$ correspond to the $n$-dimensional anchor embedding, positive embedding, and negative embedding, respectively. Let $d$ be a vector-valued, embedding-space distance metric $d \colon \mathbb{R}^n \rightarrow \mathbb{R}$. Cosine distance and Euclidean distance are both viable options for $d$.
+
+Triplet loss can then be formalized as:
+
+$$
+\ell(\vec{r}_a, \vec{r}_p, \vec{r}_n) = \text{max}(0, d(\vec{r}_a, \vec{r}_p) - d(\vec{r}_a, \vec{r}_n) + \text{margin})
+$$
+
+To build an intuitive understanding of how this loss function works, keep three things in mind:
+- We want the distance between the anchor embedding and its corresponding positive sample embedding - $d(\vec{r}_a, \vec{r}_p)$ - to be as small as possible
+- We want the distance between the anchor embedding and its corresponding negative sample embedding - $d(\vec{r}_a, \vec{r}_n)$ - to be as large as possible
+- Ideally, $d(\vec{r}_a, \vec{r}_p)$ would always be greater than $d(\vec{r}_a, \vec{r}_n)$ by at least $\text{margin}$, in which case, we would achieve $0$ loss
+
+Observe that triplet loss is not defined as a piecewise function - it combines all three vectors into one loss computation, and includes both positive and negative sample embeddings. The result is that triplet loss *simultaneously* disperses dissimilar vectors while coalescing similar vectors in embedding space.
 
 ## Code
-We provide an implementation of a contrastive learning loss function called triplet loss. This is our preferred approach since it simultaneously encourages embeddings corresponding to similar samples to coalesce and embeddings corresponding to dissimilar samples to disperse in embedding space. Even though it is not natively implemented in PyTorch, it is simple to implement ourselves.
+With all the concepts and theory out of the way, we (finally) get to the triplet loss implementation. We have decided to use cosine distance as our embedding space distance metric but Euclidean distance can be used as a drop-in replacement with minimal modification of the business logic if that is more suitable for your model and data.
+
+> If our model does not normalize embeddings, we are likely sacrificing performance in choosing cosine distance over Euclidean distance as our distance metric. If embeddings are normalized, cosine distance and Euclidean distance will often perform similarly well. If embeddings are not normalized and may therefore differ significantly in their magnitudes, Euclidean distance will be substantially more capable of capturing differences between vectors than cosine distance.
+{: .prompt-warning}
 
 ```python
-print('hello')
+import torch
+from torch import nn
+
+class TripletLoss(nn.Module):
+    def __init__(
+        self,
+
+        # Good choices of margin values are often in (0.0, 0.5]
+        margin: float = 0.35
+    ) -> None:
+        super().__init__()
+
+        self.cos_sim = nn.CosineSimilarity()
+        self.margin = margin
+
+    def forward(
+        self,
+
+        # All three parameters are expected to be of shape: (b, d)
+        # with `b` as the batch size and `d` as the embedding dimension
+        anchor: torch.tensor,
+        positive: torch.tensor,
+        negative: torch.tensor,
+    ) -> torch.tensor:
+        # Compute cosine distances for positive and negative sample embeddings
+        #
+        # Shape: (b, d) => (b)
+        pos_dist: torch.tensor = 1 - self.cos_sim(anchor, positive)
+        neg_dist: torch.tensor = 1 - self.cos_sim(anchor, negative)
+
+        # Compute loss distances
+        #
+        # Shape: (b)
+        dists: torch.tensor = pos_dist - neg_dist + self.margin
+
+        return torch.mean( # Shape: (1)
+            torch.maximum( # Shape: (b)
+                dists,
+                torch.zeros_like(dists),
+            )
+        )
 ```
 
-## Performance
-
-- Performance of cosine embedding loss probably ends up about the same as triplet loss if your dataset contains enough positive and negative samples
-
 ## Conclusion
+Both triplet loss and cosine embedding loss functions are great options for contrastive learning. I would expect to see similar performance between the two in most cases but, as in all things in ML, one may be more suitable for your model architecture, data, and objective than the other.
+
+When using triplet loss, both Euclidean distance and cosine distance are generally sound options but it is imperative to keep in mind the differences between the two so you can choose whichever one suits your model architecture and data most effectively.
