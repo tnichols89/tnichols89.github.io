@@ -86,4 +86,10 @@ $$
 $$
 
 ## Conclusion
+We have shown that:
+
+$$
+\nabla_{z^{(i)}} \text{CE}(y^{(i)}, \hat{y}^{(i)}) = \hat{y}^{(i)} - y^{(i)}
+$$
+
 Despite being an extremely powerful loss function used ubiquitously throughout machine learning, the analytic gradient for cross entropy is actually shockingly simple and efficient to compute.
