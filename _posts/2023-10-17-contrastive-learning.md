@@ -14,12 +14,8 @@ Just like there are different loss functions that are useful for discriminative 
 
 In this post, we will explore contrastive learning, how it differs from purely discriminative objectives, and the advantages and disadvantages.
 
-> Keep in mind that contrastive learning and discriminative learning are **not** mutually exclusive. They can be and often are combined to improve model performance as much as possible, especially in cases where the goal is to train a core model (or a "backbone" model) that we want to re-use for many downstream tasks.
+> Keep in mind that contrastive learning and discriminative learning are **not** mutually exclusive. They can be and often are combined to improve model performance as much as possible, especially in cases where the goal is to train a core model (or a "backbone" model) that we want to combine with numerous downstream task-specific models.
 {: .prompt-info}
-
-The differences between the loss functions yield different behavior from the model that can bring a number of bene
-- Imbue embeddings with certain characteristics, i.e. distribution in embedding space
-- Embeddings often become more useful for all manner of downstream tasks
 
 ## Intuition
 Contrastive learning is fundamentally not about classifying samples; it's about encouraging healthy distribution of embeddings in embedding space. The overarching concept of contrastive learning is simple: we use loss functions that incentivize the model to produce embeddings that are close to each other in embedding space for similar samples and embeddings that are far away from each other in embedding space for dissimilar samples.
