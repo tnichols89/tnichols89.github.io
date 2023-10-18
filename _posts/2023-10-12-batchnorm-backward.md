@@ -26,7 +26,7 @@ $$
 $$
 
 Where:
-- $\mu_B, \sigma^2_B, \gamma, \beta, x \in \mathbb{R}^d$
+- $y_i, \gamma, \beta, \hat{x}_i, x_i, \sigma^2_B, \mu_B \in \mathbb{R}^d$
 - $d$ represents the number of features in each sample $x$
 - $m$ is the number of samples in each minibatch
 - $\epsilon \in \mathbb{R}$ is some small number (often `1e-8`) included to avoid divide by zero issues
@@ -43,12 +43,14 @@ To this end, we introduce a function $f$ that is not defined in the forward pass
 We denote this subsequent layer as $f$, and $\frac{\partial f}{\partial y_i}$ represents the upstream gradient.
 
 ## Math, Step-by-Step
+Note that we use $\odot$ to represent the Hadamard product, i.e. elementwise multiplication.
+
 ### Step 1: Find dgamma
 
 $$
 \begin{align*}
   \frac{\partial f}{\partial \gamma} &= \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \gamma} \\
-  &= \Sigma^m_{i=1} \frac{\partial f}{\partial y_i} \cdot \hat{x}_i
+  &= \Sigma^m_{i=1} \frac{\partial f}{\partial y_i} \odot \hat{x}_i
 \end{align*}
 $$
 
@@ -60,7 +62,7 @@ $$
 $$
 \begin{align*}
   \frac{\partial f}{\partial \beta} &= \frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \beta} \\
-  &= \Sigma^m_{i=1} \frac{\partial f}{\partial y_i} \cdot \vec{1}
+  &= \Sigma^m_{i=1} \frac{\partial f}{\partial y_i} \odot \vec{1}
 \end{align*}
 $$
 
@@ -90,7 +92,7 @@ In an effort to keep our work organized, we break the equation derived above int
 First, we will need:
 
 $$
-\frac{\partial f}{\partial y_i} \frac{\partial y_i}{\partial \hat{x}_i}
+\frac{\partial f}{\partial y_i} \odot \frac{\partial y_i}{\partial \hat{x}_i}
 $$
 
 But since $\frac{\partial f}{\partial y_i}$ is given to us as the upstream gradient, we will only need to find an expression for $\frac{\partial y_i}{\partial \hat{x}_i}$:
@@ -235,9 +237,9 @@ Altogether, the three partial derivatives we need to perform the backward pass o
 
 $$
 \begin{align*}
-  \frac{\partial f}{\partial \gamma} &= \Sigma^m_{i=1} \frac{\partial f}{\partial y_i} \cdot \hat{x}_i \\
-  \frac{\partial f}{\partial \beta} &= \Sigma^m_{i=1} \frac{\partial f}{\partial y_i} \cdot \vec{1} \\
-  \frac{\partial f}{\partial x_i} &= \frac{(\sigma^2_B + \epsilon)^{-1/2}}{m} \left[ m \frac{\partial f}{\partial \hat{x}_i} - \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \right] - \hat{x}_i \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \hat{x}_j \right] \right]
+  \frac{\partial f}{\partial \gamma} &= \Sigma^m_{i=1} \frac{\partial f}{\partial y_i} \odot \hat{x}_i \\
+  \frac{\partial f}{\partial \beta} &= \Sigma^m_{i=1} \frac{\partial f}{\partial y_i} \odot \vec{1} \\
+  \frac{\partial f}{\partial x_i} &= \frac{(\sigma^2_B + \epsilon)^{-1/2}}{m} \odot \left[ m \frac{\partial f}{\partial \hat{x}_i} - \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \right] - \hat{x}_i \Sigma^m_{j=1} \left[ \frac{\partial f}{\partial \hat{x}_j} \odot \hat{x}_j \right] \right]
 \end{align*}
 $$
 
