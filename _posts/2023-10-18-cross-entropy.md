@@ -12,7 +12,7 @@ Conceptually, cross entropy trains the model to produce a probability distributi
 
 Since cross entropy uses softmax to generate a probability distribution over all possible classes for a sample, it is only used for single-classification problems in which every sample must be predicted to have exactly 1 label. It cannot be used for multiple-classification problems where a given sample may have 0 or more than 1 classification. For those types of problems, we use sigmoid and binary cross entropy independently on each possible class for a given sample. That derivation is out of scope of this post.
 
-### Cross Entropy
+## Cross Entropy Gradients
 Given the following equivalence:
 
 $$
@@ -39,7 +39,7 @@ We proceed by examining the gradient of cross entropy in two cases.
 
 Let $\ell$ denote the index in $y^{(i)}$ of the true label of $z^{(i)}$.
 
-#### Case 1
+### Case 1
 Consider the gradient of cross entropy for all of the incorrect classifications for sample $z^{(i)}$.
 
 That is, assume $j \neq \ell$. Then:
@@ -54,7 +54,7 @@ $$
 
 Recall that $y^{(i)}$ is a one-hot vector containing a single $1$ in the location corresponding to the correct class and zeroes elsewhere. Since we are examining the case in which $j \neq \ell$, this sum is computed exclusively over the wrong classifications for $z^{(i)}$ and so $y^{(i)}_j$ is zero in all terms. 
 
-#### Case 2
+### Case 2
 Consider the gradient of cross entropy for the correct classification for sample $z^{(i)}$.
 
 That is, assume $j = \ell$. Then:
@@ -75,7 +75,7 @@ $$
 \end{align*}
 $$
 
-#### Recombination
+### Recombination
 Combining the results of our two cases, we see that:
 
 $$
