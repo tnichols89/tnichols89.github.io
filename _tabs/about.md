@@ -27,5 +27,3 @@ My chief hopes in creating this blog are that it:
 1. Provides other students with intuitive and insightful perspectives on complex and often opaque material
 
 I hope you find the resources herein enlightening, and I wish you the best of luck on your academic journey.
-
-And don't forget: no matter how thick the material gets, we are in this together.
