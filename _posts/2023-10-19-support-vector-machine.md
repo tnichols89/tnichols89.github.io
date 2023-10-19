@@ -8,11 +8,11 @@ math: true
 ## Overview
 Support vector machines (SVMs) are arguably the most powerful linear classification models in widespread use. They are linear models that can be trained using the hinge loss function, among other similar linear loss functions.
 
-SVMs are able to work so well in part because the hinge loss function - a loss function commonly used by SVMs - incentivizes the model to generate scores (i.e. unnormalized logits produced by the model) with a hyperparameter margin $\Delta$ between the scores corresponding to the various possible classifications that may be applied to each sample. In addition, high scores for correct classification of a given sample are rewarded and, simultaneously, high scores for incorrect classification of the given sample are harshly penalized.
+SVMs work very well in part because the hinge loss function - a loss function commonly used by SVMs - incentivizes the model to generate high scores for the correct classification of a given sample while *simultaneously* pushing scores corresponding to incorrect classification lower than that of the correct classification by a hyperparameterized margin $\Delta$.
 
 The margin concept may seem a bit abstract at first, but its utility becomes more apparent as we dive into the definition of the hinge loss function used by SVMs.
 
-SVMs can also handle linearly separable data when trained with the hinge loss function.
+SVMs can also handle linearly separable data when trained with the hinge loss function, and the convexity of the hinge loss function means that the model reliably converges during training.
 
 Despite being linear models, SVMs can utilize nonlinear "kernels" that further improve their effectiveness against datasets with certain nonlinear distributions. Commonly used kernels include the dot product kernel, the polynomial kernel, the radial basis function kernel, and the sigmoid kernel.
 
