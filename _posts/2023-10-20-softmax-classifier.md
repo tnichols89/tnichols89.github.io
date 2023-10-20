@@ -33,7 +33,6 @@ $$
 \begin{align*}
   \ell(x_i) &= -\log(\hat{y}(x_i))\\
   &= -\log \left( \frac{\exp\left\{f_{y_i}(x_i)\right\}}{\Sigma^k_j \exp\left\{f_{j}(x_i)\right\}} \right) \\
-  % &= -\log \left( \frac{\exp\left\{f_{y_i}\right\}}{\Sigma^k_j \exp\left\{f_{j}\right\}} \right) \\
   &= -\left[ \log\left( \exp\left\{ f_{y_i}(x_i) \right\} \right) - \log\left( \Sigma^k_j \exp\left\{f_{j}(x_i)\right\} \right)\right] \\
   &= -f_{y_i}(x_i) + \log\left( \Sigma^k_j \exp\left\{f_{j}(x_i)\right\} \right) \\
   &= - \left[ W x_i \right]_{y_i} + \log\left( \Sigma^k_j \exp\left\{\left[ W x_i \right]_j\right\} \right)
