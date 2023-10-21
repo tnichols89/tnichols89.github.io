@@ -4,9 +4,9 @@ icon: fas fa-info-circle
 order: 5
 ---
 
-My name is [Tyler Nichols](https://www.linkedin.com/in/tyler-nichols-08148723/).
+My name is [Tyler Nichols](https://www.linkedin.com/in/tyler-nichols-08148723/). I am a career cybersecurity professional with a sophisticated expertise in artificial intelligence and machine learning.
 
-I graduated with my bachelor's degree from Loyola Marymount University in Computer Science in 2013, spent a year studying cryptographic systems at the University of Oregon, and went on to spend approximately 8 years as an information security engineer at various technology companies in Seattle and the San Francisco Bay Area.
+I graduated with my bachelor's degree in Computer Science from Loyola Marymount University in 2013, spent a year studying cryptographic systems at the University of Oregon, and went on to spend approximately 8 years as an information security engineer at various technology companies in Seattle and the San Francisco Bay Area.
 
 Between 2022 and 2023, I studied artificial intelligence and machine learning at Stanford University through the Stanford Center for Professional Development (SCPD) as part of the non-degree option program. I earned my [Graduate Certificate in Artificial Intelligence](https://digitalcredential.stanford.edu/check/C7092F55A5A50E60F137821F3D334DCB163B1003F4FCD244CDE6DBB2CBA1664AZnBFRFBFd2xFODhmODFMYU1rQlJ5dFk2Njkwd1dOcktoeGQ2TVlqaVgrNUN1dWpo) in June 2023 after completing the following courses:
 
