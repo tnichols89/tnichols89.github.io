@@ -71,7 +71,7 @@ $$
 \mathbb{1} \left\{ \text{<conditional>} \right\}
 $$
 
-is referred to as the "indicator function." It simply evaluates to the number to the left ($\mathbb{1} in this case$) when the `<conditional>` inside of the curly braces evaluates to true. This notation is often used for counting in ML texts.
+is referred to as the "indicator function." It simply evaluates to the number to the left ($\mathbb{1}$ in this case) when the `<conditional>` inside of the curly braces evaluates to true. This notation is often used for counting in ML texts.
 
 > This gradient counts the number of incorrect classifications with scores that were not at least $\Delta$ lower than the correct classification score and scales the negation of the sample feature vector $x_i$ by that value. The optimizer - typically stochastic gradient descent with a linear model like this - will then use that value to either update $w^T_{y_i}$ to yield a higher score or not make any changes at all if $w^T_{y_i} x_i > w^T_j x_i$ by at least $\Delta$ for all negative classifications $j$.
 {: .prompt-info}
