@@ -52,7 +52,7 @@ $$
 \end{align*}
 $$
 
-Recall that $y^{(i)}$ is a one-hot vector containing a single $1$ in the location corresponding to the correct class and zeroes elsewhere. Since we are examining the case in which $j \neq \ell$, this sum is computed exclusively over the wrong classifications for $z^{(i)}$ and so $y^{(i)}_j$ is zero in all terms. 
+Recall that $y^{(i)}$ is a one-hot vector containing a single $1$ in the location corresponding to the correct class and zeroes elsewhere. Since we are examining the case in which $j \neq \ell$, this sum is computed exclusively over the terms $z^{(i)}$ for which the corresponding $y^{(i)}_j$ terms are zero. 
 
 ### Case 2
 Consider the gradient of cross entropy for the correct classification for sample $z^{(i)}$.
