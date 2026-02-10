@@ -70,8 +70,8 @@ $$
   &= -1 + \frac{1}{\Sigma^k_{n=1} e^{z^{(i)}_n}} \cdot e^{z^{(i)}_j} \\
   &= -1 + \frac{e^{z^{(i)}_j}}{\Sigma^k_{n=1} e^{z^{(i)}_n}} \\
   &= -1 + \text{softmax}_{j}(z^{(i)}) \\
-  &= -y_{l}^{(i)} + \hat{y}_{j}^{(i)} \\
-  &= \hat{y}_{j}^{(i)} - y_{l}^{(i)}
+  &= -y_{\ell}^{(i)} + \hat{y}_{j}^{(i)} \\
+  &= \hat{y}_{j}^{(i)} - y_{\ell}^{(i)}
 \end{align*}
 $$
 
