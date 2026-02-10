@@ -80,7 +80,7 @@ Combining the results of our two cases, we see that:
 
 $$
 \begin{align*}
-  \frac{\partial \text{CE}(y^{(i)}, \hat{y}^{(i)})}{\partial z^{(i)}} &= \hat{y}^{(i)} - y^{(i)} + 0 \\
+  \frac{\partial \text{CE}(y^{(i)}, \hat{y}^{(i)})}{\partial z^{(i)}} &= \hat{y}^{(i)} - y^{(i)} + \vec{0} \\
   &= \hat{y}^{(i)} - y^{(i)}
 \end{align*}
 $$
