@@ -69,8 +69,8 @@ $$
   &= -1 + \frac{1}{\Sigma^k_{n=1} e^{z^{(i)}_n}} \cdot \nabla_{z^{(i)}_j} \left[ \Sigma^k_{n=1} e^{z^{(i)}_n} \right] \\
   &= -1 + \frac{1}{\Sigma^k_{n=1} e^{z^{(i)}_n}} \cdot e^{z^{(i)}_j} \\
   &= -1 + \frac{e^{z^{(i)}_j}}{\Sigma^k_{n=1} e^{z^{(i)}_n}} \\
-  &= -1 + \text{softmax}(z^{(i)}) \\
-  &= -y^{(i)}_j + \hat{y}^{(i)} \\
+  &= -1 + \text{softmax}_{j}(z^{(i)}) \\
+  &= -y^{(i)}_j + \hat{y}_{j}^{(i)} \\
   &= \hat{y}^{(i)} - y^{(i)}_j
 \end{align*}
 $$
