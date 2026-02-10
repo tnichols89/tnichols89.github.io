@@ -71,7 +71,7 @@ $$
   &= -1 + \frac{e^{z^{(i)}_j}}{\Sigma^k_{n=1} e^{z^{(i)}_n}} \\
   &= -1 + \text{softmax}_{j}(z^{(i)}) \\
   &= -y^{(i)}_j + \hat{y}_{j}^{(i)} \\
-  &= \hat{y}^{(i)} - y^{(i)}_j
+  &= \hat{y}_{j}^{(i)} - y^{(i)}_j
 \end{align*}
 $$
 
