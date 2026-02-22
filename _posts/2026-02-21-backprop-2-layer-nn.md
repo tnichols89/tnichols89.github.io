@@ -41,6 +41,7 @@ Throughout this post, we will use the following variables when defining the dime
 
 # Forward Pass
 Since we are building a neural network for a classification task involving 10 classes, we begin with the cross entropy objective function as the root node of our network:
+
 $$
 \begin{align*}
   J &= \text{CrossEntropy}(\vec{y}, \hat{y}) & \text{where } \vec{y}, \hat{y} \in \mathbb{R}^{k \times 1} \\
@@ -51,6 +52,7 @@ $$
 $$
 
 And we define the "hidden" layers of our neural network as:
+
 $$
 \begin{align*}
   z^{[2]} &= W^{[2]T} a^{[2]} + b^{[2]} &\in \mathbb{R}^{k \times 1} \\
@@ -60,6 +62,7 @@ $$
 $$
 
 Where our activation function is defined as the typical sigmoid function:
+
 $$
 \sigma(x) = \frac{1}{1+e^{-x}} \forall x \in \mathbb{R}
 $$
@@ -77,6 +80,7 @@ All of the learnable parameters in our network reside in $W^{[1]}$, $b^{[1]}$, $
 We begin by deriving the gradient of our cross entropy loss function with respect to the final output layer of our neural network, $z^{[2]}$
 
 Note that we have [already derived the gradient of the cross entropy function]({% post_url 2023-10-18-cross-entropy %}) with respect to $\hat{y}$ and found that:
+
 $$
 \begin{align*}
   \frac{\partial J}{\partial z^{[2]}} &= \frac{\partial \text{CrossEntropy}(\vec{y}, \hat{y})}{\partial z^{[2]}} \\
@@ -87,6 +91,7 @@ $$
 This will serve as the "entrypoint" into the rest of the recursive backpropagation process for the rest of our network.
 
 We start by finding $\frac{\partial J}{\partial W^{[2]}}$ using the chain rule of calculus:
+
 $$
 \begin{align*}
   \frac{\partial J}{\partial W^{[2]}} &= \left[ \frac{\partial J}{\partial z^{[2]}} \cdot \left[ \frac{\partial z^{[2]}}{\partial W^{[2]}} \right] ^T \right] ^T \\
@@ -97,6 +102,7 @@ $$
 $$
 
 Where:
+
 $$
 \begin{align*}
   \frac{\partial J}{\partial z^{[2]}} &= (\hat{y} - \vec{y}) &\in \mathbb{R}^{k \times 1} \\
@@ -108,6 +114,7 @@ $$
 ---
 
 Next, we find $\frac{\partial J}{\partial b^{[2]}}$, again using the chain rule:
+
 $$
 \begin{align*}
   \frac{\partial J}{\partial b^{[2]}} &= \left[ \frac{\partial J}{\partial z^{[2]}} \right] ^T \cdot \frac{\partial z^{[2]}}{\partial b^{[2]}} \\
@@ -119,6 +126,7 @@ $$
 $$
 
 Where:
+
 $$
 \begin{align*}
   \frac{\partial J}{\partial z^{[2]}} &= (\hat{y} - \vec{y}) &\in \mathbb{R}^{k \times 1} \\
@@ -149,6 +157,7 @@ Where $\odot$ denotes the Hadamard product and $\otimes$ denotes the outer produ
 {: .prompt-tip}
 
 We already know that $\frac{\partial J}{\partial z^{[2]}} = (\hat{y} - \vec{y}) \in \mathbb{R}^{k \times 1}$ so we derive the $\frac{\partial z^{[2]}}{\partial a^{[1]}}$, $\frac{\partial a^{[1]}}{\partial z^{[1]}}$, and $\frac{\partial z^{[1]}}{\partial W^{[1]}}$ terms one at a time while remaining cognizant of the dimensionality of each term:
+
 $$
 \begin{align*}
   \frac{\partial J}{\partial z^{[2]}} &= (\hat{y} - \vec{y}) &\in \mathbb{R}^{k \times 1} \\
@@ -163,6 +172,7 @@ $$
 {: .prompt-warning}
 
 Finally, we combine all the terms piece by piece:
+
 $$
 \begin{align*}
   \frac{\partial J}{\partial z^{[2]}} &= (\hat{y} - \vec{y}) &\in \mathbb{R}^{k \times 1} \\
@@ -180,6 +190,7 @@ $$
 ---
 
 All we have left to do now is derive $\frac{\partial J}{\partial b^{[1]}}$:
+
 $$
 \begin{align*}
   \frac{\partial J}{\partial b^{[1]}} &= \frac{\partial J}{\partial z^{[1]}} \cdot \frac{\partial z^{[1]}}{\partial b^{[1]}} \\
@@ -191,6 +202,7 @@ $$
 
 # Conclusion
 We have found that:
+
 $$
 \begin{align*}
   \frac{\partial J}{\partial W^{[2]}} &= a^{[1]} \cdot (\hat{y} - \vec{y})^T &\in \mathbb{R}^{h \times k} \\
