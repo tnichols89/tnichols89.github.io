@@ -55,7 +55,7 @@ And we define the "hidden" layers of our neural network as:
 
 $$
 \begin{align*}
-  z^{[2]} &= W^{[2]T} a^{[2]} + b^{[2]} &\in \mathbb{R}^{k \times 1} \\
+  z^{[2]} &= W^{[2]T} a^{[1]} + b^{[2]} &\in \mathbb{R}^{k \times 1} \\
   a^{[1]} &= \sigma (z^{[1]}) &\in \mathbb{R}^{h \times 1} \\
   z^{[1]} &= W^{[1]T} x + b^{[1]} &\in \mathbb{R}^{h \times 1}
 \end{align*}
