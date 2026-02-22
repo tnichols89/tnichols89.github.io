@@ -188,3 +188,16 @@ $$
   &= \left[ W^{[2]} \cdot (\hat{y} - \vec{y}) \right] \odot a^{[1]} \odot (1-a^{[1]}) &\in \mathbb{R}^{h \times 1}
 \end{align*}
 $$
+
+# Conclusion
+We have found that:
+$$
+\begin{align*}
+  \frac{\partial J}{\partial W^{[2]}} &= a^{[1]} \cdot (\hat{y} - \vec{y})^T &\in \mathbb{R}^{h \times k} \\
+  \frac{\partial J}{\partial b^{[2]}} &= \hat{y} - \vec{y} &\in \mathbb{R}^{k \times 1} \\
+  \frac{\partial J}{\partial W^{[1]}} &= \vec{x} \otimes \left[ \left[ W^{[2]} \cdot (\hat{y} - \vec{y}) \right] \odot a^{[1]} \odot (1-a^{[1]}) \right]^T &\in \mathbb{R}^{d \times h} \\
+  \frac{\partial J}{\partial b^{[1]}} &= \left[ W^{[2]} \cdot (\hat{y} - \vec{y}) \right] \odot a^{[1]} \odot (1-a^{[1]}) &\in \mathbb{R}^{h \times 1}
+\end{align*}
+$$
+
+These gradients can be directly computed and applied to our network to update the learnable parameters using gradient descent or other more sophisticated parameter optimization techniques such as AdamW.
